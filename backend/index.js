@@ -5,26 +5,14 @@ import { Item } from "./models/model.js";
 import cors from "cors";
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
+import upload from "../backend/uploads/upload.js";
 
 
 const app = express();
 app.use(express.json());
 app.use(cors());
-app.use('/files',express.static("files"))
 
-const multer = require("multer");
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "./files");
-  },
-  filename: function (req, file, cb) {
-    const unSuffix = Date.now();
-    cb(null,unSuffix+file.originalname);
-  },
-});
-
-const upload = multer({ storage: storage });
 
 
 app.get("/item", async (req, res) => {
@@ -58,7 +46,7 @@ app.post("/item",upload.single("file"), async (req,res)=>{
       phoneno: req.body.phoneno,
       title: req.body.title,
       description: req.body.description,
-      image: req.file.filename,
+      image: req.file.path,
     };
    const item=await Item.create(newItem);
    return res.status(200).send(item);
