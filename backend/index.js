@@ -11,7 +11,6 @@ import upload from "../backend/uploads/upload.js";
 const app = express();
 app.use(express.json());
 app.use(cors());
-app.use("/files", express.static("uploads"));
 
 
 
@@ -47,7 +46,7 @@ app.post("/item",upload.single("file"), async (req,res)=>{
       phoneno: req.body.phoneno,
       title: req.body.title,
       description: req.body.description,
-       image: req.file ? `/files/${req.file.filename}` : null, 
+      image: req.file.path,
     };
    const item=await Item.create(newItem);
    return res.status(200).send(item);
