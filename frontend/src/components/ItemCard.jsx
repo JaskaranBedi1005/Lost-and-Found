@@ -2,7 +2,10 @@ import noImage from "../assets/no-image.png";
 
 export default function Itemcard(props) {
   const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
-  const imageSrc = props.image ? BASE_URL + props.image : noImage;
+
+  const imageSrc = props.image
+    ? `${BASE_URL.replace(/\/$/, "")}${props.image.startsWith("/") ? props.image : "/" + props.image}`
+    : noImage;
 
   return (
     <a href={"/find/details/" + props.id} data-aos="fade-up">
