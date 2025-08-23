@@ -1,32 +1,17 @@
-import { useState ,useEffect} from "react";
-import { api } from "../config";
-import noImage from "../assets/no-image.png"
-import axios from "axios";
-
+import noImage from "../assets/no-image.png";
 
 export default function Itemcard(props) {
-  const [image, setImage] = useState(noImage);
-  useEffect(() => {
-    axios
-      .get(`${api}/files/${props.image}`)
-      .then((res) => {
-        setImage(`${api}/files/${props.image}`);
-      })
-      .catch((error) => {
-        setImage(noImage);
-      });
-
-
-  },[props.image]);
-
+  const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+  const imageSrc = props.image ? BASE_URL + props.image : noImage;
 
   return (
     <a href={"/find/details/" + props.id} data-aos="fade-up">
       <div className="card">
         <div className="card-img">
           <img
-            src={image}
-            alt=""
+            src={imageSrc}
+            alt={props.title}
+            onError={e => { e.target.onerror = null; e.target.src = noImage; }}
           />
         </div>
         <div className="card-desc">
